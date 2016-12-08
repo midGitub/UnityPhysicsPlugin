@@ -7,11 +7,13 @@
     <ClCompile Include="World.cpp" />
     <ClCompile Include="POLYGON_HANDLE.c" />
     <ClCompile Include="Face.cpp" />
+    <ClCompile Include="Collision.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h" />
     <ClInclude Include="Polygon.h" />
     <ClInclude Include="World.h" />
     <ClInclude Include="Face.h" />
+    <ClInclude Include="Collision.h" />
   </ItemGroup>
 </Project>
