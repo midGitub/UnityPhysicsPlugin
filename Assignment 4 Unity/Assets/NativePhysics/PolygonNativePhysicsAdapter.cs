@@ -122,7 +122,7 @@ namespace Humber.GAME205.NativePhysics
             handle = World.PolygonCreate( Polygon.Vertices, Position, Rotation, mass, useGravity );
 
             // Set up an event listener to update the native polygon's geometry whenever it changes in C#.
-            Polygon.VerticesChanged.AddListener( () => {
+            Polygon.ValuesChanged.AddListener( () => {
                 World.PolygonSetVertices( handle, Polygon.Vertices );
             } );
         }

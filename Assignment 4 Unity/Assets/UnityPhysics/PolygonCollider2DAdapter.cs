@@ -24,7 +24,7 @@ namespace Humber.GAME205.UnityPhysics
             UpdateColliderPoints();
 
             // Set up an event listener to update the Collider geometry whenever the Polygon changes.
-            Polygon.VerticesChanged.AddListener( UpdateColliderPoints );
+            Polygon.ValuesChanged.AddListener( UpdateColliderPoints );
         }
 
         void UpdateColliderPoints()

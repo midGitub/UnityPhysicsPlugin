@@ -148,6 +148,7 @@
     <ClCompile Include="POLYGON_HANDLE.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Polygon.cpp" />
+    <ClCompile Include="Shape.cpp" />
     <ClCompile Include="TransportVector2.c" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
@@ -156,6 +157,7 @@
     <ClInclude Include="Face.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="Polygon.h" />
+    <ClInclude Include="Shape.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
