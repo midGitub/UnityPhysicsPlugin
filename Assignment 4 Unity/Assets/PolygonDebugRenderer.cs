@@ -22,6 +22,10 @@ namespace Humber.GAME205
         public Color SelectedColor = new Color( 0f, 1f, 1f, 1f );
         [Tooltip( "The polygon to draw (defaults to the sibling Polygon component if null)." )]
         public Polygon[] polygons;
+        /*[Tooltip("The physics adpters for each polygon (mainly used to get physics information from the library)")]
+        public NativePhysics.PolygonNativePhysicsAdapter[] nativePolygons;*/
+        [Tooltip("The Native Physics World")]
+        public NativePhysics.NativePhysicsWorld world;
 
         // Static
         protected static Material lineMaterial;
@@ -32,6 +36,16 @@ namespace Humber.GAME205
             // If polygons isn't set (IS NULL), set it to the collection of Polygon components in this GO 
             // and its children and return them.
             get { return polygons ?? ( polygons = GetComponentsInChildren<Polygon>() ); }
+        }
+
+        /*public NativePhysics.PolygonNativePhysicsAdapter[] NativePolygons
+        {
+            get { return nativePolygons ?? (nativePolygons = GetComponentsInChildren<NativePhysics.PolygonNativePhysicsAdapter>()); }
+        }*/
+
+        public NativePhysics.NativePhysicsWorld World
+        {
+            get { return world ?? (world = gameObject.GetComponent<NativePhysics.NativePhysicsWorld>()); }
         }
 
         #region Unity Message Handlers
@@ -130,6 +144,12 @@ namespace Humber.GAME205
                     continue;
                 }
 
+                //Vector2 position = World.PolygonGetPosition(polygon.Handle);
+                //Vector2 direction = World.PolygonGetVelocity(polygon.Handle);
+                //direction.Normalize();
+
+                //polygon.
+
                 // Set up the MVP matrix for this polygon.
                 GL.PushMatrix();
                 GL.MultMatrix( polygon.transform.localToWorldMatrix );
@@ -148,11 +168,31 @@ namespace Humber.GAME205
                         GL.Vertex3( vertex.x, vertex.y, 0f );
                         GL.Vertex3( nextVertex.x, nextVertex.y, 0f );
                     }
+
+                    /*GL.Color(Color.white);
+                    Vector2 direction = World.PolygonGetVelocity(polygon.Handle);
+                    GL.Vertex3(polygon.transform.position.x, polygon.transform.position.y, 0f);
+                    GL.Vertex3(
+                        polygon.transform.position.x + direction.x, 
+                        polygon.transform.position.y + direction.y, 
+                        0f);*/
                 }
                 GL.End();
+                
+                /*//begin drawin the velocity vector
+                GL.Begin(GL.LINES);
+                {
+                    GL.Color(Color.white);
+
+                    GL.Vertex3(polygon.transform.position.x, polygon.transform.position.y, 0f);
+                    GL.Vertex3(polygon.transform.position.x + 0.5f, polygon.transform.position.y + 0.5f, 0f);
+                }
+                GL.End();*/
 
                 // Revert to the previous MVP matrix.
                 GL.PopMatrix();
+
+             
             }
         }
         

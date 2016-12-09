@@ -25,6 +25,9 @@ class Polygon
 	bool	  __isAwake;
 	bool	  __isStatic;
 
+	int layer;
+	std::vector<int> __collisionLayers;
+
 	Polygon( std::vector<glm::vec2>* vertices, glm::vec2 position, float rotation = 0.0f, float mass = 1.0f, bool useGravity = false );
 	~Polygon();
 

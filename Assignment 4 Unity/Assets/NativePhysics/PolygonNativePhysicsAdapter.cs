@@ -121,6 +121,8 @@ namespace Humber.GAME205.NativePhysics
             // Create the C++ instance representing this polygon.
             handle = World.PolygonCreate( Polygon.Vertices, Position, Rotation, mass, useGravity );
 
+            Polygon.Handle = handle;
+
             // Set up an event listener to update the native polygon's geometry whenever it changes in C#.
             Polygon.ValuesChanged.AddListener( () => {
                 World.PolygonSetVertices( handle, Polygon.Vertices );

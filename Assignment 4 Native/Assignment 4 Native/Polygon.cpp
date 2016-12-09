@@ -14,6 +14,7 @@ Polygon::Polygon( std::vector<glm::vec2>* vertices, glm::vec2 position, float ro
 	, __faces( std::vector<Face>() )
 	, __isAwake( true )
 	, __isStatic( false )
+	, __collisionLayers( NULL ) 
 {
 	SetVertices( vertices );
 }
