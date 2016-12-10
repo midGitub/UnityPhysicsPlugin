@@ -116,9 +116,25 @@ void Polygon::UpdateRotationalInertia()
 	}
 	averageRadius /= __vertices->size();
 
+	__averageRadius = averageRadius * RADIUS_MULTIPLIER;
+
 	// Using mr^2 since arbitrary polygons can be oddly shaped. This isn't perfect but we could do 
 	// better if we made subclasses for ideal shapes that we could define more accurately.
 	__rotationalInertia = __mass * averageRadius * averageRadius;
+}
+
+/// Broad phase for collision, less expensive to calculate
+bool Polygon::CollidedBroadPhase(Polygon* p) const {
+
+	float deltaX = this->GetPosition().x - p->GetPosition().x;
+	float deltaXsquare = deltaX * deltaX;
+	float deltaY = this->GetPosition().y - p->GetPosition().y;
+	float deltaYsquare = deltaY*deltaY;
+
+	float sumRadius = this->GetAverageRadius() + p->GetAverageRadius();
+	float sumRadiusSquare = sumRadius * sumRadius;
+
+	return deltaXsquare + deltaYsquare <= sumRadiusSquare;
 }
 
 // PUBLIC
@@ -144,7 +160,7 @@ void Polygon::SetMass( float mass )
 	UpdateRotationalInertia();
 }
 
-glm::vec2 Polygon::GetPosition()
+glm::vec2 Polygon::GetPosition() const
 {
 	return __position;
 }

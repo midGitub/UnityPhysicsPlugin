@@ -48,11 +48,14 @@ void World::Step( float deltaTimeSeconds )
 			//only check for collision if the specified layer is supposed to collide
 			if (aCollisions.size() == 0 || it != aCollisions.end())
 			{
-				// Actually test whether this pair collides and store the collision if so.
-				Collision collision;
-				if (TestCollision(aPolygon, bPolygon, &collision))
-				{
-					__collisions.push_back(collision);
+				//checking for less expensive collision (broadphase)
+				if (aPolygon->CollidedBroadPhase(bPolygon)) {
+					// Actually test whether this pair collides and store the collision if so.
+					Collision collision;
+					if (TestCollision(aPolygon, bPolygon, &collision))
+					{
+						__collisions.push_back(collision);
+					}
 				}
 			}
 		}
@@ -158,8 +161,6 @@ bool World::TestSeparateAxisTheorem( Polygon* facePolygon, Polygon* vertexPolygo
 
 	return true;
 }
-
-
 
 // PUBLIC
 

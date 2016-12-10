@@ -2,6 +2,8 @@
 #include <vector>
 #include <glm.hpp>
 
+#define RADIUS_MULTIPLIER 1
+
 class Face;
 
 class Polygon
@@ -27,6 +29,7 @@ class Polygon
 
 	int __layer;
 	std::vector<int> __collisionLayers;
+	float __averageRadius;
 
 	Polygon( std::vector<glm::vec2>* vertices, glm::vec2 position, float rotation = 0.0f, float mass = 1.0f, bool useGravity = false );
 	Polygon(std::vector<glm::vec2>* vertices, glm::vec2 position, int layer, int* collisionLayers, int collisionLayersSize, bool isStatic, float rotation, float mass, bool useGravity);
@@ -37,6 +40,7 @@ class Polygon
 	void UpdateGlobalVertices();
 	void UpdateRotationalInertia();
 
+	bool CollidedBroadPhase(Polygon* p) const;
 
 	public:
 
@@ -46,7 +50,7 @@ class Polygon
 	float GetMass();
 	void SetMass( float mass );
 
-	glm::vec2 GetPosition();
+	glm::vec2 GetPosition() const;
 	void SetPosition( glm::vec2 position );
 	void Translate( glm::vec2 dPosition );
 
@@ -97,5 +101,9 @@ class Polygon
 
 	inline void setStatic(bool b) {
 		__isStatic = b;
+	}
+
+	inline float GetAverageRadius() const {
+		return __averageRadius;
 	}
 };
