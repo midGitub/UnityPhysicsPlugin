@@ -70,7 +70,19 @@ namespace Humber.GAME205.NativePhysics
 
             return NativePhysics.PolygonCreate( transportVertices, transportVertices.Length, new TransportVector2( position ), rotation, mass, useGravity );
         }
-        
+
+        public int PolygonCreate(IEnumerable<Vector2> vertices, Vector2 position, int layer, int[] layerCollision, bool isStatic, float rotation = 0f, float mass = 1f, bool useGravity = false)
+        {
+            ThrowExceptionIfNativeWorldDoesNotExist();
+
+            // Pack the collection of Vector2s for transport (this also copies the array).
+            var transportVertices = vertices
+            .Select(vertex => new TransportVector2(vertex))
+            .ToArray();
+
+            return NativePhysics.PolygonCreate(transportVertices, transportVertices.Length, new TransportVector2(position), layer, layerCollision, layerCollision.Length, isStatic, rotation, mass, useGravity);
+        }
+
         public void PolygonDestroy( int handle )
         {
             NativePhysics.PolygonDestroy( handle );
@@ -201,8 +213,11 @@ namespace Humber.GAME205.NativePhysics
             [DllImport( DLL_NAME, CallingConvention = CallingConvention.Cdecl )]
             public extern static void WorldDestroy();
 
-            [DllImport( DLL_NAME, CallingConvention = CallingConvention.Cdecl )]
-            public static extern int PolygonCreate( TransportVector2[] vertices, int verticesLength, TransportVector2 position, float rotation = 0f, float mass = 1f, bool useGravity = false );
+            [DllImport(DLL_NAME, CallingConvention = CallingConvention.Cdecl)]
+            public static extern int PolygonCreate(TransportVector2[] vertices, int verticesLength, TransportVector2 position, float rotation = 0f, float mass = 1f, bool useGravity = false );
+
+            [DllImport(DLL_NAME, CallingConvention = CallingConvention.Cdecl)]
+            public static extern int PolygonCreate(TransportVector2[] vertices, int verticesLength, TransportVector2 position, int layer, int[] collisions, int collisionSize, bool isStatic, float rotation = 0f, float mass = 1f, bool useGravity = false);
 
             [DllImport( DLL_NAME, CallingConvention = CallingConvention.Cdecl )]
             public extern static void PolygonDestroy( int handle );

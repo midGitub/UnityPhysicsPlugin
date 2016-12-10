@@ -38,8 +38,12 @@ int main()
 	rect2[ 3 ].x = -5.0f;
 	rect2[ 3 ].y = 1.0f;
 
-	POLYGON_HANDLE polygon1 = PolygonCreate( rect1, 4, position1, glm::radians<float>( 30.0f ) );
-	POLYGON_HANDLE polygon2 = PolygonCreate( rect2, 4, position2, 0.0f );
+	int* layers = new int[1]{ 1 };
+	int* layers2 = new int[1]{ 2 };
+
+
+	POLYGON_HANDLE polygon1 = PolygonCreate( rect1, 4, position1, 0, layers, 1, false,  glm::radians<float>( 30.0f ) );
+	POLYGON_HANDLE polygon2 = PolygonCreate( rect2, 4, position2, 1, layers2, 1, true, 0.0f);
 
 	long step = 20L;
 	float deltaTime = step / 1000.0f;

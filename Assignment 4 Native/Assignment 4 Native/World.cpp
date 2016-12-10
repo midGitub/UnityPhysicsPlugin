@@ -2,6 +2,9 @@
 #include "Collision.h"
 #include "Face.h"
 
+//using the function find from this library
+#include <algorithm>
+
 // PRIVATE
 
 // Returns a new unique HANDLE each time it is called that the World uses to make it possible 
@@ -31,12 +34,12 @@ void World::Step( float deltaTimeSeconds )
 			{
 				continue;
 			}
-
+			
 			// Actually test whether this pair collides and store the collision if so.
 			Collision collision;
-			if( TestCollision( aPolygon, bPolygon, &collision ) )
+			if (TestCollision(aPolygon, bPolygon, &collision))
 			{
-				__collisions.push_back( collision );
+				__collisions.push_back(collision);
 			}
 		}
 	}
@@ -54,6 +57,11 @@ void World::Step( float deltaTimeSeconds )
 	for ( auto aIterator = __polygons.begin(); aIterator != __polygons.end(); ++aIterator )
 	{
 		Polygon* aPolygon = aIterator->second;
+
+		//if polygon is static, no forces are acting on it
+		if (aPolygon->isStatic()) {
+			continue;
+		}
 
 		// Apply gravity if this polygon is expecting it.
 		if ( aPolygon->GetUseGravity() )
@@ -83,16 +91,35 @@ void World::Step( float deltaTimeSeconds )
 
 bool World::TestCollision( Polygon* aPolygon, Polygon* bPolygon, Collision* maybeCollision )
 {
-	// Test SAT with the faces of aPolygon and the vertices of bPolygon.
-	if( !TestSeparateAxisTheorem( aPolygon, bPolygon, maybeCollision ) )
+	std::vector<int> aCollisions = aPolygon->GetCollisionLayers();
+	std::vector<int> bCollisions = bPolygon->GetCollisionLayers();
+
+	//iterator to look for the collision layers
+	std::vector<int>::iterator it;
+	it = find(aCollisions.begin(), aCollisions.end(), bPolygon->GetLayer());
+
+	//assuming that when there's no collision layer is the default and collide with everything
+	//or check if the layer of the other polygon was found
+
+	//only check for collision if the specified layer is supposed to collide
+	if (it != aCollisions.end())
 	{
-		return false;
+		// Test SAT with the faces of aPolygon and the vertices of bPolygon.
+		if (!TestSeparateAxisTheorem(aPolygon, bPolygon, maybeCollision))
+		{
+			return false;
+		}
 	}
 
+
+	it = find(bCollisions.begin(), bCollisions.end(), aPolygon->GetLayer());
 	// Test SAT with the faces of bPolygon and the vertices of aPolygon.
-	if( !TestSeparateAxisTheorem( bPolygon, aPolygon, maybeCollision ) )
+	if (it != bCollisions.end())
 	{
-		return false;
+		if (!TestSeparateAxisTheorem(bPolygon, aPolygon, maybeCollision))
+		{
+			return false;
+		}
 	}
 
 	// If we haven't exited out yet, return the collision object.
@@ -178,6 +205,13 @@ POLYGON_HANDLE World::CreatePolygon( std::vector<glm::vec2>* vertices, glm::vec2
 {
 	auto handle = GeneratePolygonHandle();
 	__polygons.emplace( handle, new Polygon( vertices, position, rotation, mass, useGravity ) );
+	return handle;
+}
+
+POLYGON_HANDLE World::CreatePolygon(std::vector<glm::vec2>* vertices, glm::vec2 position, int layer, int* collisionLayers, int collisionLayersSize, bool isStatic, float rotation, float mass, bool useGravity)
+{
+	auto handle = GeneratePolygonHandle();
+	__polygons.emplace(handle, new Polygon(vertices, position, layer, collisionLayers, collisionLayersSize, isStatic, rotation, mass, useGravity));
 	return handle;
 }
 

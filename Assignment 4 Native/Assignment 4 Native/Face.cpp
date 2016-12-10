@@ -1,8 +1,6 @@
 #include "Face.h"
 #include "Polygon.h"
 
-
-
 Face::Face( Polygon* polygon, int vertexIndex1, int vertexIndex2 )
 	: __polygon( polygon )
 	, __vertexIndex1( vertexIndex1 )

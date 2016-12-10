@@ -25,10 +25,11 @@ class Polygon
 	bool	  __isAwake;
 	bool	  __isStatic;
 
-	int layer;
+	int __layer;
 	std::vector<int> __collisionLayers;
 
 	Polygon( std::vector<glm::vec2>* vertices, glm::vec2 position, float rotation = 0.0f, float mass = 1.0f, bool useGravity = false );
+	Polygon(std::vector<glm::vec2>* vertices, glm::vec2 position, int layer, int* collisionLayers, int collisionLayersSize, bool isStatic, float rotation, float mass, bool useGravity);
 	~Polygon();
 
 	void UpdateCenterOfMass();
@@ -71,6 +72,16 @@ class Polygon
 	std::vector<glm::vec2>& GetVertices();
 	std::vector<glm::vec2>& GetGlobalVertices();
 	void SetVertices( std::vector<glm::vec2>* vertices );
+
+	void SetCollisionsLayers(int* collisionLayers, int sizeCollisionLayers);
+
+	std::vector<int> GetCollisionLayers() const {
+		return __collisionLayers;
+	}
+
+	inline int GetLayer() const {
+		return __layer;
+	}
 
 	inline bool isAwake() const {
 		return __isAwake;

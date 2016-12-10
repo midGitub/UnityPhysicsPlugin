@@ -19,7 +19,8 @@ extern "C"
 	LAB3_API void WorldUpdate( float deltaTimeSeconds );
 	LAB3_API void WorldDestroy();
 
-	LAB3_API int PolygonCreate( TransportVector2 vertices[], int verticesLength, TransportVector2 position, float rotation = 0.0f, float mass = 1.0f, bool useGravity = false );
+	//LAB3_API int PolygonCreate( TransportVector2 vertices[], int verticesLength, TransportVector2 position, float rotation = 0.0f, float mass = 1.0f, bool useGravity = false );
+	LAB3_API int PolygonCreate(TransportVector2 vertices[], int verticesLength, TransportVector2 position, int layer, int* collisionLayers, int collisionLayersSize, bool isStatic, float rotation = 0.0f, float mass = 1.0f, bool useGravity = false);
 	LAB3_API void PolygonDestroy( POLYGON_HANDLE handle );
 
 	LAB3_API void PolygonSetVertices( POLYGON_HANDLE handle, TransportVector2 vertices[], int verticesLength );

@@ -34,6 +34,8 @@ class World
 	void Update( float deltaTimeSeconds );
 
 	POLYGON_HANDLE CreatePolygon( std::vector<glm::vec2>* vertices, glm::vec2 position, float rotation = 0.0f, float mass = 1.0f, bool useGravity = false );
+	POLYGON_HANDLE CreatePolygon( std::vector<glm::vec2>* vertices, glm::vec2 position, int layer, int* collisionLayers, int collisionLayersSize, bool isStatic, float rotation, float mass, bool useGravity);
+
 	void DestroyPolygon( POLYGON_HANDLE handle );
 	Polygon* GetPolygon( POLYGON_HANDLE handle );
 

@@ -37,9 +37,16 @@ extern "C"
 
 	// Tell the World to create a new Polygon and return its HANDLE to the caller.
 	// Note: Check out the VerticesTransformToGLM() and Vector2TransformToGLM() functions below.
-	POLYGON_HANDLE PolygonCreate( TransportVector2 vertices[], int verticesLength, TransportVector2 position, float rotation, float mass, bool useGravity )
+	/*POLYGON_HANDLE PolygonCreate( TransportVector2 vertices[], int verticesLength, TransportVector2 position, float rotation, float mass, bool useGravity )
 	{
 		return __world->CreatePolygon( VerticesTransportToGLM( vertices, verticesLength ), Vector2TransportToGLM( position ), rotation, mass, useGravity );
+	}*/
+
+	POLYGON_HANDLE PolygonCreate(TransportVector2 vertices[], int verticesLength, TransportVector2 position, 
+		int layer, int* collisionLayers, int collisionLayersSize, bool isStatic, float rotation, float mass, bool useGravity)
+	{
+		return __world->CreatePolygon(VerticesTransportToGLM(vertices, verticesLength), Vector2TransportToGLM(position), 
+			layer, collisionLayers, collisionLayersSize, isStatic, rotation, mass, useGravity);
 	}
 
 	// Tell the World to destroy the Polygon at the provided handle.

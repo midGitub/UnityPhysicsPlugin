@@ -119,7 +119,9 @@ namespace Humber.GAME205.NativePhysics
             }
 
             // Create the C++ instance representing this polygon.
-            handle = World.PolygonCreate( Polygon.Vertices, Position, Rotation, mass, useGravity );
+            //handle = World.PolygonCreate( Polygon.Vertices, Position, Rotation, mass, useGravity );
+            handle = World.PolygonCreate(Polygon.Vertices, Position, Polygon.Layer, Polygon.CollisionLayers,
+                Polygon.IsStatic, Rotation, mass, useGravity);
 
             Polygon.Handle = handle;
 

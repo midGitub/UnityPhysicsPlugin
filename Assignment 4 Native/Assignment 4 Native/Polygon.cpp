@@ -19,6 +19,24 @@ Polygon::Polygon( std::vector<glm::vec2>* vertices, glm::vec2 position, float ro
 	SetVertices( vertices );
 }
 
+Polygon::Polygon(std::vector<glm::vec2>* vertices, glm::vec2 position, 
+	int layer, int* collisionLayers, int collisionLayersSize, bool isStatic, float rotation, float mass, bool useGravity)
+	: __vertices(NULL)
+	, __position(position)
+	, __rotation(rotation)
+	, __mass(mass)
+	, __useGravity(useGravity)
+	, __globalVertices(std::vector<glm::vec2>())
+	, __faces(std::vector<Face>())
+	, __isAwake(true)
+	, __isStatic(isStatic)
+	, __layer(layer)
+	, __collisionLayers(std::vector<int>())
+{
+	SetVertices(vertices);
+	SetCollisionsLayers(collisionLayers, collisionLayersSize);
+}
+
 
 Polygon::~Polygon()
 {
@@ -243,4 +261,17 @@ void Polygon::SetVertices( std::vector<glm::vec2>* vertices )
 	UpdateFaces();
 	UpdateCenterOfMass();      // Requires faces to be created.
 	UpdateRotationalInertia(); // Requires center of mass.
+}
+
+void Polygon::SetCollisionsLayers(int* collisionLayers, int sizeCollisionLayers)
+{
+	if (sizeCollisionLayers > 0) {
+		if (__collisionLayers.size() > 0) {
+			__collisionLayers.clear();
+		}
+
+		for (int i = 0; i < sizeCollisionLayers; i++) {
+			__collisionLayers.push_back(collisionLayers[i]);
+		}
+	}
 }
