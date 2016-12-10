@@ -34,12 +34,26 @@ void World::Step( float deltaTimeSeconds )
 			{
 				continue;
 			}
+
+			std::vector<int> aCollisions = aPolygon->GetCollisionLayers();
+			std::vector<int> bCollisions = bPolygon->GetCollisionLayers();
+
+			//iterator to look for the collision layers
+			std::vector<int>::iterator it;
+			it = find(aCollisions.begin(), aCollisions.end(), bPolygon->GetLayer());
 			
-			// Actually test whether this pair collides and store the collision if so.
-			Collision collision;
-			if (TestCollision(aPolygon, bPolygon, &collision))
+			//assuming that when there's no collision layer is the default and collide with everything
+			//or check if the layer of the other polygon was found
+
+			//only check for collision if the specified layer is supposed to collide
+			if (aCollisions.size() == 0 || it != aCollisions.end())
 			{
-				__collisions.push_back(collision);
+				// Actually test whether this pair collides and store the collision if so.
+				Collision collision;
+				if (TestCollision(aPolygon, bPolygon, &collision))
+				{
+					__collisions.push_back(collision);
+				}
 			}
 		}
 	}
@@ -91,35 +105,16 @@ void World::Step( float deltaTimeSeconds )
 
 bool World::TestCollision( Polygon* aPolygon, Polygon* bPolygon, Collision* maybeCollision )
 {
-	std::vector<int> aCollisions = aPolygon->GetCollisionLayers();
-	std::vector<int> bCollisions = bPolygon->GetCollisionLayers();
-
-	//iterator to look for the collision layers
-	std::vector<int>::iterator it;
-	it = find(aCollisions.begin(), aCollisions.end(), bPolygon->GetLayer());
-
-	//assuming that when there's no collision layer is the default and collide with everything
-	//or check if the layer of the other polygon was found
-
-	//only check for collision if the specified layer is supposed to collide
-	if (it != aCollisions.end())
+	// Test SAT with the faces of aPolygon and the vertices of bPolygon.
+	if (!TestSeparateAxisTheorem(aPolygon, bPolygon, maybeCollision))
 	{
-		// Test SAT with the faces of aPolygon and the vertices of bPolygon.
-		if (!TestSeparateAxisTheorem(aPolygon, bPolygon, maybeCollision))
-		{
-			return false;
-		}
+		return false;
 	}
 
-
-	it = find(bCollisions.begin(), bCollisions.end(), aPolygon->GetLayer());
 	// Test SAT with the faces of bPolygon and the vertices of aPolygon.
-	if (it != bCollisions.end())
+	if (!TestSeparateAxisTheorem(bPolygon, aPolygon, maybeCollision))
 	{
-		if (!TestSeparateAxisTheorem(bPolygon, aPolygon, maybeCollision))
-		{
-			return false;
-		}
+		return false;
 	}
 
 	// If we haven't exited out yet, return the collision object.
